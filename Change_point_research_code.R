@@ -1,4 +1,4 @@
-
+#All libraries used throughout the simulations
 library(grDevices)
 library(gridExtra)
 library(grid)
@@ -8,6 +8,8 @@ library(tseries)
 library(quantmod)
 library(fGarch)
 library(aTSA)
+library(crypto)
+library(xts)
 
 
 ###################################
@@ -30,9 +32,9 @@ w_process <- function(N, T_, beta){
   
   return(final_vec)
 }
-
+#######################################################
 #W_process redevelopment
-
+#######################################################
 
 W_process <- function(times, M, beta){
   
@@ -207,7 +209,12 @@ c_alphas_final_4 <- c(1.735013, 2.010628, 2.568760)
 
 
 #############################################
-#
+#Calculates the empirical test size using a standard normal distribution
+#M
+#t
+#N
+#beta
+#c_alpha
 #############################################
 calculate_alpha <- function(M, t, N, beta, c_alpha){
  
@@ -293,7 +300,7 @@ simulate_tau_sn <- function(M, T_, N, beta, c_alphas){
   return(sizes)
 }
 
-
+#Simulations
 
 #Beta = 3/4
 calculate_alpha(100, 100, 5000, 3/4,c_alphas_final_34[1])
@@ -407,6 +414,7 @@ calculate_alpha_exp <- function(M, t, N, beta, c_alpha){
   
   return(alpha)
 }
+#Simulations
 
 #Beta = 1
 calculate_alpha_exp(100, 100, 5000, 1,c_alphas_final_1[1])
@@ -1075,12 +1083,6 @@ ar_1 <- garch.sim(model=list(ar = c(.9, -.2)), n = 100)
 ar_2 <- garch.sim(model= list(ar = c(.5)), n = 100)
 
 
-
-#############ARCH#######################
-
-
-
-
 ###########ARMA#########################
 
 arma_1 <- 3 + arima.sim(model=list(ar = c(.9, -.2),ma=c(-.7,.1)), n = 100)
@@ -1141,7 +1143,11 @@ sample_test_statistic_stop_time <- function(train, test, beta, c_alpha){
 }
 
 #############################################
-#
+#Perform sequential monitoring procedure
+#M
+#beta
+#c_alphas
+#N
 #############################################
 simulate_tau <- function(M, beta, c_alphas, N){
   sizes <- vector()
@@ -3537,8 +3543,6 @@ calculate_returns_and_plots_daily("AAPL", sample_pct = .30, toFile = TRUE, stop_
 
 
 
-library(crypto)
-library(xts)
 calculate_returns_and_plots_crypto <- function(name, sample_pct = 0.10, weekly_sample_size = 104, toFile = FALSE, stop_time = FALSE, ker = "None"){
 
   Stock <- read.csv("data/btc.csv", header = TRUE)
@@ -3666,15 +3670,16 @@ calculate_returns_and_plots_stoptime <- function(path, name, weeks = 100, months
   
   
 }
-
-
+##################################################
+#Perform sequential procedure on great depression data
+##################################################
 calculate_returns_and_plots_stoptime("data/DJIA_data_1929.csv", "DJIA", toFile = TRUE, stop_time = TRUE, ker = "None")
 
 
 
-###################################################
+##############################################################################################
 #All Stop Times
-###################################################
+##############################################################################################
 
 
 stock_sample_stop_times <- function(series_xts, M, beta, c_alpha, file_name, stock, ker){
@@ -3730,7 +3735,9 @@ stock_sample_stop_times <- function(series_xts, M, beta, c_alpha, file_name, sto
 
 
 
-
+############################################
+#Calculates and plots all stop times that are found with the sequential monitoring procedure.
+############################################
 
 calculate_all_stop_times <- function(name, sample_pct = 0.10, toFile = FALSE, stop_time = FALSE, ker = "None"){
   
