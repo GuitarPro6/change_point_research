@@ -101,7 +101,10 @@ test_statistic = function(N, beta, endpoint){
 
 
 #############################################
-#
+#Runs the simulation with the specified value of beta on the interval [0, endpoint+1]
+#N = number of times to run the simulation
+#Beta - constant for the denominator of the Theta(u) statistic
+#endpoint - the endpoint of the interval created
 #############################################
 run_simulation <- function(N, Beta, endpoint){
   
@@ -131,7 +134,9 @@ run_simulation <- function(N, Beta, endpoint){
 
 
 #############################################
-#
+#Creates the critical value tables for use in the latex document
+#N = number of times to perform the simulation
+#endpoint = endpoint for the run_simulation method
 #############################################
 critical_value_table <- function(N, endpoint){
   
@@ -195,8 +200,6 @@ critical_value_table(500, 400)
 critical_value_table(500, 1000)
 
 
-
-
 unname(quantile(W_process_mod(1000, 100, 3/4), c(.90, .95, .99)))
 ##########################################Analysis of Type 1 Error################################################
 
@@ -210,11 +213,11 @@ c_alphas_final_4 <- c(1.735013, 2.010628, 2.568760)
 
 #############################################
 #Calculates the empirical test size using a standard normal distribution
-#M
-#t
-#N
-#beta
-#c_alpha
+#M = number of data points for the training sample
+#t = number of data points for the test sample
+#N = number of times to run the simulation
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alpha = critical value associated with the chosen test size
 #############################################
 calculate_alpha <- function(M, t, N, beta, c_alpha){
  
@@ -246,7 +249,11 @@ calculate_alpha <- function(M, t, N, beta, c_alpha){
   return(alpha)
 }
 #############################################
-#
+#Calculates the stop time using the sequential procedure
+#train = training set
+#test = test set
+#beta = constant 
+#c_alpha = critical values associated with the chosen test size. 
 #############################################
 sample_test_statistic_stop_time <- function(train, test, beta, c_alpha){
   
@@ -380,6 +387,14 @@ calculate_alpha(1000, 1000, 5000, 4,c_alphas_final_4[3])
 
 
 #########iid Exponential############
+#############################################
+#Calculates the empirical test size using an exponential distribution
+#M = number of data points for the training sample
+#t = number of data points for the test sample
+#N = number of times to run the simulation
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alpha = critical value associated with the chosen test size
+#############################################
 
 calculate_alpha_exp <- function(M, t, N, beta, c_alpha){
   max_vector <- vector() 
@@ -474,6 +489,14 @@ calculate_alpha_exp(1000, 1000, 5000, 4,c_alphas_final_4[3])
 
 
 ###########iid T-Distribution###################
+#############################################
+#Calculates the empirical test size using an t-distribution
+#M = number of data points for the training sample
+#t = number of data points for the test sample
+#N = number of times to run the simulation
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alpha = critical value associated with the chosen test size
+#############################################
 calculate_alpha_t_dist <- function(M,t, N, beta, c_alpha, df = 5){
   h = floor(t^(1/2)/beta)
   max_vector <- vector() 
@@ -564,6 +587,14 @@ calculate_alpha_t_dist(1000, 1000, 5000, 4,c_alphas_final_4[3])
 
 
 ###########iid Uniform###################
+#############################################
+#Calculates the empirical test size using an exponential distribution
+#M = number of data points for the training sample
+#t = number of data points for the test sample
+#N = number of times to run the simulation
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alpha = critical value associated with the chosen test size
+#############################################
 calculate_alpha_unif <- function(M, t, N, beta, c_alpha){
   h = floor(t^(1/2))
   max_vector <- vector() 
@@ -597,6 +628,8 @@ calculate_alpha_unif <- function(M, t, N, beta, c_alpha){
   
   return(alpha)
 }
+
+#Simulations
 
 #Beta = 1
 calculate_alpha_unif(100, 100, 5000, 1,c_alphas_final_1[1])
@@ -656,6 +689,14 @@ calculate_alpha_unif(1000, 1000, 5000, 4,c_alphas_final_4[3])
 
 
 ##############iid Gamma#######################
+#############################################
+#Calculates the empirical test size using the gamma distribution
+#M = number of data points for the training sample
+#t = number of data points for the test sample
+#N = number of times to run the simulation
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alpha = critical value associated with the chosen test size
+#############################################
 calculate_alpha_gamm <- function(M, t, N, beta, c_alpha){
   h = floor(t^(1/2))
   max_vector <- vector() 
@@ -747,6 +788,14 @@ calculate_alpha_gamm(1000, 1000, 5000, 4,c_alphas_final_4[2])
 calculate_alpha_gamm(1000, 1000, 5000, 4,c_alphas_final_4[3])
 
 ##############iid F-Distribution#######################
+#############################################
+#Calculates the empirical test size using the F distribution
+#M = number of data points for the training sample
+#t = number of data points for the test sample
+#N = number of times to run the simulation
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alpha = critical value associated with the chosen test size
+#############################################
 calculate_alpha_F <- function(M, t, N, beta, c_alpha){
   h = floor(t^(1/2)/beta)
   max_vector <- vector() 
@@ -853,6 +902,14 @@ calculate_alpha_F(1000, 1000, 5000, 4,c_alphas_final_4[3])
 
 
 ##############iid Chi-Square Distribution#######################
+#############################################
+#Calculates the empirical test size using the Chi-square distribution
+#M = number of data points for the training sample
+#t = number of data points for the test sample
+#N = number of times to run the simulation
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alpha = critical value associated with the chosen test size
+#############################################
 calculate_alpha_Chi <- function(M, t, N, beta, c_alpha, df = 5){
   h = floor(t^(1/2))
   max_vector <- vector() 
@@ -981,7 +1038,7 @@ plot(h_Vec, h_sim, main = bquote(alpha ~ "values as function of " ~ h), xlab = b
 #Simulate Test statistics for different types of models
 
 
-#############################################
+#####################################                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              ########
 #
 #############################################
 sample_test_statistic <- function(train, test, window){
@@ -1143,9 +1200,9 @@ sample_test_statistic_stop_time <- function(train, test, beta, c_alpha){
 }
 
 #############################################
-#Perform sequential monitoring procedure
+#Perform sequential monitoring procedure on standard normal random variables
 #M
-#beta
+#beta = beta parameter in the denominator of the Theta(u) statistic
 #c_alphas
 #N
 #############################################
@@ -1173,7 +1230,13 @@ simulate_tau(100, 4, c_alphas_final_4, 5000)
 
 
 #Under the alternative
-
+#############################################
+#Perform sequential monitoring procedure under the alternative
+#M
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alphas
+#N
+#############################################
 simulate_tau_alt <- function(M, mean_test, beta, c_alphas, N){
   sizes <- vector()
   stops <- vector()
@@ -1215,7 +1278,11 @@ simulate_tau_alt(100, 4, 3, c_alphas_final_3, 5000)
 simulate_tau_alt(100, 4, 4, c_alphas_final_4, 5000)
 
 #############################################
-#
+#Perform sequential monitoring procedure on chi square random variables
+#M
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alphas
+#N
 #############################################
 simulate_tau_chi <- function(M, beta, c_alphas, N){
   sizes <- vector()
@@ -1241,9 +1308,12 @@ simulate_tau_chi(100, 3, c_alphas_final_3, 5000)
 simulate_tau_chi(100, 4, c_alphas_final_4, 5000)
 
 
-
 #############################################
-#
+#Perform sequential monitoring procedure on gamma random variables
+#M
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alphas
+#N
 #############################################
 simulate_tau_gamm <- function(M, beta, c_alphas, N){
   sizes <- vector()
@@ -1270,7 +1340,11 @@ simulate_tau_gamm(100, 4, c_alphas_final_4, 5000)
 
 
 #############################################
-#
+#Perform sequential monitoring procedure on exponential random variables
+#M
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alphas
+#N
 #############################################
 simulate_tau_exp <- function(M, beta, c_alphas, N){
   sizes <- vector()
@@ -1297,7 +1371,11 @@ simulate_tau_exp(100, 4, c_alphas_final_4, 5000)
 
 
 #############################################
-#
+#Perform sequential monitoring procedure on uniform random variables
+#M = training sample size
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alphas
+#N
 #############################################
 simulate_tau_unif <- function(M, beta, c_alphas, N){
   sizes <- vector()
@@ -1317,14 +1395,19 @@ simulate_tau_unif <- function(M, beta, c_alphas, N){
 }
 
 
-#############################################
-#
-#############################################
 simulate_tau_unif(100, 1, c_alphas_final_1, 5000)
 simulate_tau_unif(100, 2, c_alphas_final_2, 5000)
 simulate_tau_unif(100, 3, c_alphas_final_3, 5000)
 simulate_tau_unif(100, 4, c_alphas_final_4, 5000)
 
+
+#############################################
+#Perform sequential monitoring procedure on uniform random variables
+#M = training sample size
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alphas
+#N
+#############################################
 simulate_tau_pois <- function(M, beta, c_alphas, N){
   sizes <- vector()
   stops <- vector()
@@ -1342,10 +1425,7 @@ simulate_tau_pois <- function(M, beta, c_alphas, N){
   return(c(sizes, kbar))
 }
 
-
-#############################################
 #
-#############################################
 simulate_tau_pois(100, 1, c_alphas_final_1, 5000)
 simulate_tau_pois(100, 2, c_alphas_final_2, 5000)
 simulate_tau_pois(100, 3, c_alphas_final_3, 5000)
@@ -1394,7 +1474,11 @@ tau_probability(1000, 100, 2, 3)
 set.seed(101)
 
 #############################################
-#
+#Perform sequential monitoring procedure on uniform random variables
+#M = training sample size
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alphas
+#N
 #############################################
 calculate_alpha_AR <- function(M, t, N, beta, c_alpha){
   h = floor(t^(1/2))
@@ -1462,9 +1546,12 @@ calculate_alpha_AR(1000, 1000, 5000, 2,c_alphas_final_2[2])
 calculate_alpha_AR(1000, 1000, 5000, 2,c_alphas_final_2[3])
 
 
-
 #############################################
-#
+#Perform sequential monitoring procedure on uniform random variables
+#M = training sample size
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alphas
+#N
 #############################################
 #MA(1)
 calculate_alpha_MA <- function(M, t, N, beta, c_alpha){
@@ -1545,7 +1632,11 @@ calculate_alpha_MA(1000, 1000, 5000, 2,c_alphas_final_2[2])
 calculate_alpha_MA(1000, 1000, 5000, 2,c_alphas_final_2[3])
 
 #############################################
-#
+#Perform sequential monitoring procedure on uniform random variables
+#M = training sample size
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alphas
+#N
 #############################################
 #AR(2)
 calculate_alpha_AR_2 <- function(M, t, N, beta, c_alpha){
@@ -1612,7 +1703,11 @@ calculate_alpha_AR(1000, 1000, 5000, 2,c_alphas_final_2[2])
 calculate_alpha_AR(1000, 1000, 5000, 2,c_alphas_final_2[3])
 
 #############################################
-#
+#Perform sequential monitoring procedure on MA(2) process
+#M = training sample size
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alphas
+#N
 #############################################
 calculate_alpha_MA_2 <- function(M, t, N, beta, c_alpha){
   h = floor(t^(1/2))
@@ -1648,40 +1743,14 @@ calculate_alpha_MA_2 <- function(M, t, N, beta, c_alpha){
   return(alpha)
 }
 
-#############################################
-#
-#############################################
-#Beta = 1
-calculate_alpha_MA(100, 100, 5000, 1,c_alphas_final_1[1])
-calculate_alpha_MA(100, 100, 5000, 1,c_alphas_final_1[2])
-calculate_alpha_MA(100, 100, 5000, 1,c_alphas_final_1[3])
-calculate_alpha_MA(1000, 100, 5000, 1,c_alphas_final_1[1])
-calculate_alpha_MA(1000, 100, 5000, 1,c_alphas_final_1[2])
-calculate_alpha_MA(1000, 100, 5000, 1,c_alphas_final_1[3])
-calculate_alpha_MA(100, 1000, 5000, 1,c_alphas_final_1[1])
-calculate_alpha_MA(100, 1000, 5000, 1,c_alphas_final_1[2])
-calculate_alpha_MA(1000, 1000, 5000, 1,c_alphas_final_1[3])
-calculate_alpha_MA(1000, 1000, 5000, 1,c_alphas_final_1[1])
-calculate_alpha_MA(1000, 1000, 5000, 1,c_alphas_final_1[2])
-calculate_alpha_MA(1000, 1000, 5000, 1,c_alphas_final_1[3])
-
-#Beta = 2
-calculate_alpha_MA(100, 100, 2000, 2,c_alphas_final_2[1])
-calculate_alpha_MA(100, 100, 2000, 2,c_alphas_final_2[2])
-calculate_alpha_MA(100, 100, 2000, 2,c_alphas_final_2[3])
-calculate_alpha_MA(1000, 100, 2000, 2,c_alphas_final_2[1])
-calculate_alpha_MA(1000, 100, 2000, 2,c_alphas_final_2[2])
-calculate_alpha_MA(1000, 100, 2000, 2,c_alphas_final_2[3])
-calculate_alpha_MA(100, 1000, 2000, 2,c_alphas_final_2[1])
-calculate_alpha_MA(100, 1000, 2000, 2,c_alphas_final_2[2])
-calculate_alpha_MA(100, 1000, 2000, 2,c_alphas_final_2[3])
-calculate_alpha_MA(1000, 1000, 2000, 2,c_alphas_final_2[1])
-calculate_alpha_MA(1000, 1000, 2000, 2,c_alphas_final_2[2])
-calculate_alpha_MA(1000, 1000, 2000, 2,c_alphas_final_2[3])
 
 #ARMA(1,1)
 #############################################
-#
+#Perform sequential monitoring procedure on ARMA(1,1) process
+#M = training sample size
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alphas
+#N = number of times simulation is run
 #############################################
 calculate_alpha_ARMA <- function(M, t, N, beta, c_alpha){
   h = floor(t^(1/2))
@@ -1748,9 +1817,12 @@ calculate_alpha_ARMA(1000, 1000, 5000, 2,c_alphas_final_2[3])
 
 #ARMA(2,2)
 #############################################
-#
+#Calculate size of test on ARMA(2,2) process
+#M = training sample size
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alphas
+#N = number of times simulation is run
 #############################################
-
 calculate_alpha_ARMA_2 <- function(M, t, N, beta, c_alpha){
   h = floor(t^(1/2))
   max_vector <- vector() 
@@ -1786,37 +1858,12 @@ calculate_alpha_ARMA_2 <- function(M, t, N, beta, c_alpha){
 }
 
 
-#Beta = 1
-calculate_alpha_ARMA_2(100, 100, 2000, 1,c_alphas_final_1[1])
-calculate_alpha_ARMA_2(100, 100, 2000, 1,c_alphas_final_1[2])
-calculate_alpha_ARMA_2(100, 100, 2000, 1,c_alphas_final_1[3])
-calculate_alpha_ARMA_2(1000, 100, 2000, 1,c_alphas_final_1[1])
-calculate_alpha_ARMA_2(1000, 100, 2000, 1,c_alphas_final_1[2])
-calculate_alpha_ARMA_2(1000, 100, 2000, 1,c_alphas_final_1[3])
-calculate_alpha_ARMA_2(100, 1000, 2000, 1,c_alphas_final_1[1])
-calculate_alpha_ARMA_2(100, 1000, 2000, 1,c_alphas_final_1[2])
-calculate_alpha_ARMA_2(1000, 1000, 2000, 1,c_alphas_final_1[3])
-calculate_alpha_ARMA_2(1000, 1000, 2000, 1,c_alphas_final_1[1])
-calculate_alpha_ARMA_2(1000, 1000, 2000, 1,c_alphas_final_1[2])
-calculate_alpha_ARMA_2(1000, 1000, 2000, 1,c_alphas_final_1[3])
-
-#Beta = 2
-calculate_alpha_ARMA_2(100, 100, 2000, 2,c_alphas_final_2[1])
-calculate_alpha_ARMA_2(100, 100, 2000, 2,c_alphas_final_2[2])
-calculate_alpha_ARMA_2(100, 100, 2000, 2,c_alphas_final_2[3])
-calculate_alpha_ARMA_2(1000, 100, 2000, 2,c_alphas_final_2[1])
-calculate_alpha_ARMA_2(1000, 100, 2000, 2,c_alphas_final_2[2])
-calculate_alpha_ARMA_2(1000, 100, 2000, 2,c_alphas_final_2[3])
-calculate_alpha_ARMA_2(100, 1000, 2000, 2,c_alphas_final_2[1])
-calculate_alpha_ARMA_2(100, 1000, 2000, 2,c_alphas_final_2[2])
-calculate_alpha_ARMA_2(100, 1000, 2000, 2,c_alphas_final_2[3])
-calculate_alpha_ARMA_2(1000, 1000, 2000, 2,c_alphas_final_2[1])
-calculate_alpha_ARMA_2(1000, 1000, 2000, 2,c_alphas_final_2[2])
-calculate_alpha_ARMA_2(1000, 1000, 2000, 2,c_alphas_final_2[3])
-
-
 #############################################
-#
+#Calculate size of test on ARCH(2,2) process
+#M = training sample size
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alphas
+#N = number of times simulation is run
 #############################################
 calculate_alpha_ARCH <- function(M, t, N, beta, c_alpha){
   h = floor(t^(1/2))
@@ -1885,9 +1932,13 @@ calculate_alpha_ARCH(1000, 1000, 5000, 2,c_alphas_final_2[2])
 calculate_alpha_ARCH(1000, 1000, 5000, 2,c_alphas_final_2[3])
 
 
-#Do same simulations for ARMA and ARIMA
-
-
+#############################################
+#Calculate size of test on GARCH(1,1) process
+#M = training sample size
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alphas
+#N = number of times simulation is run
+#############################################
 calculate_alpha_GARCH <- function(M, t, N, beta, c_alpha){
   h = floor(t^(1/2))
   max_vector <- vector() 
@@ -1956,12 +2007,13 @@ calculate_alpha_GARCH(1000, 1000, 5000, 2,c_alphas_final_2[2])
 calculate_alpha_GARCH(1000, 1000, 5000, 2,c_alphas_final_2[3])
 
 
-
-
-########################################
-
 #############################################
-#
+#Calculate size of test on AR(1) process with lrv estimator
+#M = training sample size
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alphas
+#N = number of times simulation is run
+#kernel = kernel to run among Bartlett, Flat-TOp, Quadratic Spectra, Tukey Hanning, and None
 #############################################
 
 calculate_alpha_AR_lrv <- function(M, t, N, beta, c_alpha, kernel = "Bartlett"){
@@ -2038,7 +2090,12 @@ calculate_alpha_AR_lrv(100, 100, 5000, 2,c_alphas_final_2[2], "Tukey-Hanning")
 calculate_alpha_AR_lrv(100, 100, 5000, 2,c_alphas_final_2[3], "Tukey-Hanning")
 
 #############################################
-#
+#Calculate size of test on AR(2) process with lrv estimator
+#M = training sample size
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alphas
+#N = number of times simulation is run
+#kernel = kernel to run among Bartlett, Flat-TOp, Quadratic Spectra, Tukey Hanning, and None
 #############################################
 calculate_alpha_AR_lrv_2 <- function(M, t, N, beta, c_alpha, kernel = "Bartlett"){
   h = floor(t^(1/2))
@@ -2106,7 +2163,12 @@ calculate_alpha_AR_lrv_2(1000, 1000, 2000, 1,c_alphas_final_1[3])
 
 
 #############################################
-#
+#Calculate size of test on MA(1) process with lrv estimator
+#M = training sample size
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alphas
+#N = number of times simulation is run
+#kernel = kernel to run among Bartlett, Flat-TOp, Quadratic Spectra, Tukey Hanning, and None
 #############################################
 #MA(1)
 calculate_alpha_MA_lrv <- function(M, t, N, beta, c_alpha, kernel = "Bartlett"){
@@ -2192,7 +2254,12 @@ calculate_alpha_MA_lrv(1000, 1000, 5000, 1,c_alphas_final_1[3])
 
 
 #############################################
-#
+#Calculate size of test on MA(1) process with lrv estimator
+#M = training sample size
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alphas
+#N = number of times simulation is run
+#kernel = kernel to run among Bartlett, Flat-TOp, Quadratic Spectra, Tukey Hanning, and None
 #############################################
 ######MA(2)
 calculate_alpha_MA_lrv_2 <- function(M, t, N, beta, c_alpha, kernel = "Bartlett"){
@@ -2264,8 +2331,14 @@ calculate_alpha_MA_lrv_2(1000, 100, 2000, 2,c_alphas_final_2[1])
 calculate_alpha_MA_lrv_2(1000, 100, 2000, 2,c_alphas_final_2[2])
 calculate_alpha_MA_lrv_2(1000, 100, 2000, 2,c_alphas_final_2[3])
 
-
-######ARMA(1,1)
+#############################################
+#Calculate size of test on ARMA(1,1) process with lrv estimator
+#M = training sample size
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alphas
+#N = number of times simulation is run
+#kernel = kernel to run among Bartlett, Flat-TOp, Quadratic Spectra, Tukey Hanning, and None
+#############################################
 calculate_alpha_ARMA_lrv <- function(M, t, N, beta, c_alpha, kernel = "Bartlett"){
   h = floor(t^(1/2))
   max_vector <- vector() 
@@ -2340,11 +2413,13 @@ calculate_alpha_ARMA_lrv(100, 100, 5000, 2,c_alphas_final_2[3], "Tukey-Hanning")
 
 
 
-
-
-
 #############################################
-#
+#Calculate size of test on ARMA(2,2) process with lrv estimator
+#M = training sample size
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alphas
+#N = number of times simulation is run
+#kernel = kernel to run among Bartlett, Flat-TOp, Quadratic Spectra, Tukey Hanning, and None
 #############################################
 calculate_alpha_ARMA_lrv2 <- function(M, t, N, beta, c_alpha, kernel = "Bartlett"){
   h = floor(t^(1/2))
@@ -2407,12 +2482,13 @@ calculate_alpha_AR_lrv(1000, 1000, 2000, 1,c_alphas_final_1[2])
 calculate_alpha_AR_lrv(1000, 1000, 2000, 1,c_alphas_final_1[3])
 
 
-
-
-
-
 #############################################
-#
+#Calculate size of test on ARCH(1) process with lrv estimator
+#M = training sample size
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alphas
+#N = number of times simulation is run
+#kernel = kernel to run among Bartlett, Flat-TOp, Quadratic Spectra, Tukey Hanning, and None
 #############################################
 ######ARMA(1,1)
 calculate_alpha_ARCH_lrv <- function(M, t, N, beta, c_alpha, kernel = "Bartlett"){
@@ -2495,8 +2571,14 @@ calculate_alpha_ARCH_lrv(100, 100, 5000, 2,c_alphas_final_2[3], "None")
 
 
 
-
-######ARMA(1,1)
+#############################################
+#Calculate size of test on GARCH(1) process with lrv estimator
+#M = training sample size
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alphas
+#N = number of times simulation is run
+#kernel = kernel to run among Bartlett, Flat-TOp, Quadratic Spectra, Tukey Hanning, and None
+#############################################
 calculate_alpha_GARCH_lrv <- function(M, t, N, beta, c_alpha, kernel = "Bartlett"){
   h = floor(M^(1/2))
   max_vector <- vector() 
@@ -2585,6 +2667,13 @@ calculate_alpha_GARCH_lrv(100, 100, 5000, 2,c_alphas_final_2[3], "None")
 ################################
 
 
+
+####################################
+#Compute the long run variance, or asymptotic variance of the series x
+#x = vector of observations with time dependence.
+#ker = type of kernel to use
+####################################
+
 asymp_var <- function(x, ker = c("Bartlett", "Parzen", "Tukey-Hanning", "Quadratic Spectral", "Flat-Top")){
   T_ <- length(x)
   M_T <- floor(4*(T_/100)^{2/9})
@@ -2605,6 +2694,10 @@ asymp_var <- function(x, ker = c("Bartlett", "Parzen", "Tukey-Hanning", "Quadrat
   
 }
 
+##############################################
+#Implementation of flat top kernel
+##############################################
+
 flat_top_ft <- function(x){
   if(abs(x)<= 1/2){
     return(1)
@@ -2617,14 +2710,12 @@ flat_top_ft <- function(x){
 
 
 ##########################################################
-#Time Series Stopping Times
+#Time Series Stopping Times under alternative hypothesis
 ##########################################################
 
 ###############################################
-#ARCH/GARCH
+#ARCH stopping times
 ###############################################
-
-
 
 plot_arch_sample_statistic_stop_time <- function(M, t,beta, c_alpha){
   alpha_0 <- 0.25
@@ -2675,7 +2766,7 @@ plot_arch_sample_statistic_stop_time <- function(M, t,beta, c_alpha){
 
 
 #############################################
-#
+#GARCH
 #############################################
 plot_garch_sample_statistic_stop_time <- function(M, t,beta, c_alpha){
   alpha_0 <- 0.25
@@ -2727,7 +2818,7 @@ plot_garch_sample_statistic_stop_time <- function(M, t,beta, c_alpha){
 }
 
 #############################################
-#
+#AR(1)
 #############################################
 plot_AR_sample_statistic_stop_time <- function(M, t,beta, c_alpha){
   phi <- 0.2
@@ -2773,7 +2864,7 @@ plot_AR_sample_statistic_stop_time <- function(M, t,beta, c_alpha){
   
 }
 #############################################
-#
+#MA(1)
 #############################################
 plot_MA_sample_statistic_stop_time <- function(M, t,beta, c_alpha){
   theta <- 0.2
@@ -2822,7 +2913,7 @@ plot_MA_sample_statistic_stop_time <- function(M, t,beta, c_alpha){
 }
 
 #############################################
-#
+#ARMA(1,1)
 #############################################
 plot_ARMA_sample_statistic_stop_time <- function(M, t,beta, c_alpha){
   phi <- 0.2
@@ -2916,7 +3007,15 @@ plot_garch_stopping_time <- function(M, t, beta, c_alpha, kernel = "Bartlett"){
 
 
 ###############################################
-#
+#Perform the sequential monitoring procedure on an 'xts' series
+#series_xts = time series of type 'xts', produced by the quantmod package
+#M = number of training examples in the series
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alpha = critical value for test
+#name = name of the stock
+#tick = ticker of the stock under examination
+#ker = kernel to use for the lrv estimator
+#class = (type of return) weekly, monthly, quarterly, or annual 
 ###############################################
 stock_sample_test_statistic_stop_time <- function(series_xts, M, beta, c_alpha, name, tick, ker, class){
   series <- as.ts(series_xts)
@@ -2998,7 +3097,15 @@ plot_stock_series<- function(series, tick, type){
   
 }
 
-
+###############################################
+#Perform the sequential monitoring procedure on a stock and plot the results
+#name = stock name (ticker abbreviation)
+#sample_pct = percentage of series to include in training sample
+#weekly_sample_size = number of weeks to include in training sample
+#toFile = boolean variable indicating whether or not to save plots of returns to file
+#stop_time = boolean variable indicating whether or not to calculate stop time
+#ker = kernel to use for the lrv estimator
+###############################################
 calculate_returns_and_plots <- function(name, sample_pct = 0.10, weekly_sample_size = 100, toFile = FALSE, stop_time = FALSE, ker = "None"){
 
   options("getSymbols.warning4.0"=FALSE)
@@ -3007,11 +3114,12 @@ calculate_returns_and_plots <- function(name, sample_pct = 0.10, weekly_sample_s
   monthly_returns <- monthlyReturn(Stock, subset = '2005::', type = "log")
   quarterly_returns <- quarterlyReturn(Stock, subset = '2000::', type = "log")
   yearly_returns <- annualReturn(Stock, subset = '2000::', type = "log")
-  
+  if(toFile){
     plot_stock_series(weekly_returns, name, type = "Weekly")
     plot_stock_series(monthly_returns, name, type = "Monthly")
     plot_stock_series(quarterly_returns, name, type = "Quarterly")
     plot_stock_series(yearly_returns, name, type = "Annual")
+  }
   
     price_df <- data.frame(index(Stock), as.ts(Stock), stringsAsFactors = FALSE)
     colnames(price_df) <- c("Date", "Price (USD)")
@@ -3065,14 +3173,26 @@ calculate_returns_and_plots <- function(name, sample_pct = 0.10, weekly_sample_s
   
 }
 
+###############################################
+#Perform the sequential monitoring procedure on a stock and plot the results for daily returns
+#name = stock name (ticker abbreviation)
+#sample_pct = percentage of series to include in training sample
+#weekly_sample_size = number of weeks to include in training sample
+#toFile = boolean variable indicating whether or not to save plots of returns to file
+#stop_time = boolean variable indicating whether or not to calculate stop time
+#ker = kernel to use for the lrv estimator
+###############################################
+
 
 calculate_returns_and_plots_daily <- function(name, sample_pct = 0.20, weekly_sample_size = 100, toFile = FALSE, stop_time = FALSE, ker = "None"){
   
   options("getSymbols.warning4.0"=FALSE)
   Stock <- getSymbols(name, from = "2008-01-01", to = as.Date("2008-12-31"), env = NULL)
   daily_returns <- dailyReturn(Stock, subset = '2008::', type = "log")
-
+  
+  if(toFile){
   plot_stock_series(daily_returns, name, type = "daily")
+  }
 
   
   price_df <- data.frame(index(Stock), as.ts(Stock), stringsAsFactors = FALSE)
@@ -3117,7 +3237,15 @@ calculate_returns_and_plots_daily <- function(name, sample_pct = 0.20, weekly_sa
   
 }
 
-
+###############################################
+#Perform the sequential monitoring procedure on a stock and plot the results for all values of alpha
+#name = stock name (ticker abbreviation)
+#sample_pct = percentage of series to include in training sample
+#weekly_sample_size = number of weeks to include in training sample
+#toFile = boolean variable indicating whether or not to save plots of returns to file
+#stop_time = boolean variable indicating whether or not to calculate stop time
+#ker = kernel to use for the lrv estimator
+###############################################
 calculate_returns_and_plots_alpha <- function(name, sample_pct = 0.10, weekly_sample_size = 100, toFile = FALSE, stop_time = FALSE, ker = "None"){
   
   options("getSymbols.warning4.0"=FALSE)
@@ -3127,10 +3255,12 @@ calculate_returns_and_plots_alpha <- function(name, sample_pct = 0.10, weekly_sa
   quarterly_returns <- quarterlyReturn(Stock, subset = '2000::', type = "log")
   yearly_returns <- annualReturn(Stock, subset = '2000::', type = "log")
   
+  if(toFile){
   plot_stock_series(weekly_returns, name, type = "Weekly")
   plot_stock_series(monthly_returns, name, type = "Monthly")
   plot_stock_series(quarterly_returns, name, type = "Quarterly")
   plot_stock_series(yearly_returns, name, type = "Annual")
+  }
   
   price_df <- data.frame(index(Stock), as.ts(Stock), stringsAsFactors = FALSE)
   colnames(price_df) <- c("Date", "Price (USD)")
@@ -3194,12 +3324,17 @@ calculate_returns_and_plots_alpha <- function(name, sample_pct = 0.10, weekly_sa
     
     
   }
-  
-  
-  
-  
 }
 
+###############################################
+#Perform the sequential monitoring procedure on a stock and plot the results for dot com bubble stocks
+#name = stock name (ticker abbreviation)
+#sample_pct = percentage of series to include in training sample
+#weekly_sample_size = number of weeks to include in training sample
+#toFile = boolean variable indicating whether or not to save plots of returns to file
+#stop_time = boolean variable indicating whether or not to calculate stop time
+#ker = kernel to use for the lrv estimator
+###############################################
 
 calculate_returns_and_plots_dcom <- function(name, sample_pct = 0.10, weekly_sample_size = 104, toFile = FALSE, stop_time = FALSE, ker = "None"){
   
@@ -3210,10 +3345,12 @@ calculate_returns_and_plots_dcom <- function(name, sample_pct = 0.10, weekly_sam
   quarterly_returns <- quarterlyReturn(Stock, subset = '1997::', type = "log")
   yearly_returns <- annualReturn(Stock, subset = '1997::', type = "log")
   
+  if(toFile){
   plot_stock_series(weekly_returns, name, type = "Weekly")
   plot_stock_series(monthly_returns, name, type = "Monthly")
   plot_stock_series(quarterly_returns, name, type = "Quarterly")
   plot_stock_series(yearly_returns, name, type = "Annual")
+  }
   
   price_df <- data.frame(index(Stock), as.ts(Stock), stringsAsFactors = FALSE)
   colnames(price_df) <- c("Date", "Price (USD)")
@@ -3260,7 +3397,15 @@ calculate_returns_and_plots_dcom <- function(name, sample_pct = 0.10, weekly_sam
 }
 
 
-
+###############################################
+#Perform the sequential monitoring procedure on a stock and plot the results for neutral stocks
+#name = stock name (ticker abbreviation)
+#sample_pct = percentage of series to include in training sample
+#weekly_sample_size = number of weeks to include in training sample
+#toFile = boolean variable indicating whether or not to save plots of returns to file
+#stop_time = boolean variable indicating whether or not to calculate stop time
+#ker = kernel to use for the lrv estimator
+###############################################
 
 calculate_returns_and_plots_neut <- function(name, sample_pct = 0.10, weekly_sample_size = 100, toFile = FALSE, stop_time = FALSE, ker = "None"){
   
@@ -3271,10 +3416,12 @@ calculate_returns_and_plots_neut <- function(name, sample_pct = 0.10, weekly_sam
   quarterly_returns <- quarterlyReturn(Stock, subset = '2005::', type = "log")
   yearly_returns <- annualReturn(Stock, subset = '2005::', type = "log")
   
+  if(toFile){
   plot_stock_series(weekly_returns, name, type = "Weekly")
   plot_stock_series(monthly_returns, name, type = "Monthly")
   plot_stock_series(quarterly_returns, name, type = "Quarterly")
   plot_stock_series(yearly_returns, name, type = "Annual")
+  }
   
   price_df <- data.frame(index(Stock), as.ts(Stock), stringsAsFactors = FALSE)
   colnames(price_df) <- c("Date", "Price (USD)")
@@ -3310,18 +3457,19 @@ calculate_returns_and_plots_neut <- function(name, sample_pct = 0.10, weekly_sam
     M <- ceiling(sample_pct*length(yearly_returns))
     stop_time <- stock_sample_test_statistic_stop_time(yearly_returns, M, 1, c_alphas_final_1[1], paste(name, "_annual", sep = ""), tick = name, ker, "Annual") 
     
-    
-    
-    
-    
   }
-  
-  
-  
   
 }
 
-
+###############################################
+#Perform the sequential monitoring procedure on a stock and plot the results for recent bubble stocks
+#name = stock name (ticker abbreviation)
+#sample_pct = percentage of series to include in training sample
+#weekly_sample_size = number of weeks to include in training sample
+#toFile = boolean variable indicating whether or not to save plots of returns to file
+#stop_time = boolean variable indicating whether or not to calculate stop time
+#ker = kernel to use for the lrv estimator
+###############################################
 
 calculate_returns_and_plots_up <- function(name, sample_pct = 0.10, weekly_sample_size = 100, toFile = FALSE, stop_time = FALSE, ker = "None"){
   
@@ -3332,10 +3480,12 @@ calculate_returns_and_plots_up <- function(name, sample_pct = 0.10, weekly_sampl
   quarterly_returns <- quarterlyReturn(Stock, subset = '2014::', type = "log")
   yearly_returns <- annualReturn(Stock, subset = '2014::', type = "log")
   
+  if(toFile){
   plot_stock_series(weekly_returns, name, type = "Weekly")
   plot_stock_series(monthly_returns, name, type = "Monthly")
   plot_stock_series(quarterly_returns, name, type = "Quarterly")
   plot_stock_series(yearly_returns, name, type = "Annual")
+  }
   
   price_df <- data.frame(index(Stock), as.ts(Stock), stringsAsFactors = FALSE)
   colnames(price_df) <- c("Date", "Price (USD)")
@@ -3371,15 +3521,18 @@ calculate_returns_and_plots_up <- function(name, sample_pct = 0.10, weekly_sampl
     M <- ceiling(sample_pct*length(yearly_returns))
     stop_time <- stock_sample_test_statistic_stop_time(yearly_returns, M, 1, c_alphas_final_1[1], paste(name, "_annual", sep = ""), tick = name, ker, "Annual") 
     
-    
-    
   }
   
-  
-  
-  
 }
-
+###############################################
+#Perform the sequential monitoring procedure on a stock and plot the results for Japan's N225 index
+#name = stock name (ticker abbreviation)
+#sample_pct = percentage of series to include in training sample
+#weekly_sample_size = number of weeks to include in training sample
+#toFile = boolean variable indicating whether or not to save plots of returns to file
+#stop_time = boolean variable indicating whether or not to calculate stop time
+#ker = kernel to use for the lrv estimator
+###############################################
 calculate_returns_and_plots_jap <- function(name, weeks = 30, months = 8, toFile = FALSE, stop_time = FALSE, ker = "None"){
   
   options("getSymbols.warning4.0"=FALSE)
@@ -3388,8 +3541,10 @@ calculate_returns_and_plots_jap <- function(name, weeks = 30, months = 8, toFile
   weekly_returns <- weeklyReturn(Stock, subset = '1988::', type = "log")
   monthly_returns <- monthlyReturn(Stock, subset = '1988::', type = "log")
   
+  if(toFile){
   plot_stock_series(weekly_returns, name, type = "Weekly")
   plot_stock_series(monthly_returns, name, type = "Monthly")
+  }
   
   price_df <- data.frame(index(Stock), as.ts(Stock), stringsAsFactors = FALSE)
   colnames(price_df) <- c("Date", "Price (USD)")
@@ -3421,10 +3576,17 @@ calculate_returns_and_plots_jap <- function(name, weeks = 30, months = 8, toFile
     
   }
   
-  
-  
-  
 }
+
+###############################################
+#Perform the sequential monitoring procedure on the S&P 500
+#name = stock name (ticker abbreviation)
+#sample_pct = percentage of series to include in training sample
+#weekly_sample_size = number of weeks to include in training sample
+#toFile = boolean variable indicating whether or not to save plots of returns to file
+#stop_time = boolean variable indicating whether or not to calculate stop time
+#ker = kernel to use for the lrv estimator
+###############################################
 calculate_returns_and_plots_SP <- function(name, sample_pct = 0.10, toFile = FALSE, stop_time = FALSE, ker = "None"){
   
   options("getSymbols.warning4.0"=FALSE)
