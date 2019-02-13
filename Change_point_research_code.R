@@ -2803,7 +2803,7 @@ plot_garch_sample_statistic_stop_time <- function(M, t,beta, c_alpha){
   }
   
   k_val <- M + k
-  title <- bquote("GARCH(1,1),  " ~ omega == .(omega) ~ ", " ~ alpha == .(alpha_0) ~", Test " ~ omega == .(omega_2))
+  title <- bquote("GARCH(1,1),  " ~ omega == .(omega) ~ ", " ~ alpha == .(alpha_0) ~", " ~ beta == .(beta_0) ~", Test " ~ omega == .(omega_2))
   plot.ts(c(y_arch_train, test), main = title)
   abline(v = k_val, col = "red")
   
@@ -3631,29 +3631,9 @@ calculate_returns_and_plots_SP <- function(name, sample_pct = 0.10, toFile = FAL
   }
   
   
-  
-  
 }
 
 
-
-file_name1 <- paste("/Users/Jon/Library/Mobile Documents/com~apple~CloudDocs/Class Work 2018/Thesis/plots/stocks/", "AAPL",  "_returns.pdf", sep = "")
-pdf(file_name1)
-plot.xts(weekly_returns, ylab = "Log Return")
-dev.off()
-
-
-options("getSymbols.warning4.0"=FALSE)
-Stock <- getSymbols("JPM", from = "1900-01-01", to = as.Date("2018-12-31"), env = NULL)
-Stock <- na.omit(Stock)
-
-plot_stock_price(Stock, "JPM")
-weekly_returns <- weeklyReturn(Stock, subset = '2005::')
-stock_sample_test_statistic_stop_time(weekly_returns, 73, 1, c_alphas_final_1[1], "JPM", ker = "None")
-plot(monthly_returns)
-monthly_returns <- monthlyReturn(Stock, subset = '2000::')
-quarterly_returns <- quarterlyReturn(Stock, subset = '2000::', type = "log")
-yearly_returns <- annualReturn(Stock, subset = '1990::', type = "log")
 
 calculate_returns_and_plots("AAPL", sample_pct = 0.50, toFile = TRUE, stop_time = TRUE, ker = "Flat-Top")
 
@@ -3666,6 +3646,7 @@ calculate_returns_and_plots("BAC", toFile = TRUE, stop_time = TRUE, ker = "Flat-
 
 calculate_returns_and_plots("PYS", toFile = TRUE, stop_time = TRUE, ker = "Flat-Top")
 
+##################Create all plots used in final document############################
 calculate_returns_and_plots_alpha("AIG", toFile = TRUE, stop_time = TRUE, ker = "None")
 calculate_returns_and_plots("AIG", toFile = TRUE, stop_time = TRUE, ker = "None")
 calculate_returns_and_plots("BAC", toFile = TRUE, stop_time = TRUE, ker = "None")
@@ -3696,6 +3677,7 @@ calculate_returns_and_plots_up("FIT", toFile = TRUE, weekly_sample_size = 24, st
 
 calculate_returns_and_plots_jap("Nikkei", months = 12, weeks = 52, toFile = TRUE, stop_time = TRUE, ker = "None")
 
+######################################################################################
 calculate_returns_and_plots_daily("AAPL", sample_pct = .30, toFile = TRUE, stop_time = TRUE, ker = "Quadratic Spectral")
 
 ########################################
@@ -3703,7 +3685,15 @@ calculate_returns_and_plots_daily("AAPL", sample_pct = .30, toFile = TRUE, stop_
 ########################################
 
 
-
+###############################################
+#Perform the sequential monitoring procedure on Bitcoin
+#name = stock name (ticker abbreviation)
+#sample_pct = percentage of series to include in training sample
+#weekly_sample_size = number of weeks to include in training sample
+#toFile = boolean variable indicating whether or not to save plots of returns to file
+#stop_time = boolean variable indicating whether or not to calculate stop time
+#ker = kernel to use for the lrv estimator
+###############################################
 
 calculate_returns_and_plots_crypto <- function(name, sample_pct = 0.10, weekly_sample_size = 104, toFile = FALSE, stop_time = FALSE, ker = "None"){
 
@@ -3774,7 +3764,18 @@ calculate_returns_and_plots_crypto("BTC", toFile = TRUE, stop_time = TRUE, ker =
 ##################################################
 
 
-calculate_returns_and_plots_stoptime <- function(path, name, weeks = 100, months = 12 , toFile = FALSE, stop_time = FALSE, ker = "None"){
+###############################################
+#Perform the sequential monitoring procedure on external data set
+#path = file path for data set
+#name = stock name (ticker abbreviation)
+#weeks = number of weeks to train on
+#months = number of months to train on
+#toFile = boolean variable indicating whether or not to save plots of returns to file
+#stop_time = boolean variable indicating whether or not to calculate stop time
+#ker = kernel to use for the lrv estimator
+###############################################
+
+calculate_returns_and_plots_stoptime <- function(path, name, weeks = 52, months = 12 , toFile = FALSE, stop_time = FALSE, ker = "None"){
   
   Stock <- read.csv(path, header = TRUE)
   Stock_clean <- na.omit(Stock)
