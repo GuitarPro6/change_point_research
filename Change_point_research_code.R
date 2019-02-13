@@ -12,6 +12,12 @@ library(crypto)
 library(xts)
 
 
+##################################
+#Change point detection, Mstat Project
+#Author: Jonathan Bown
+##################################
+
+
 ###################################
 #Original attempt at simulating Brownian motion. This method doesn't work well numerically because the sin function oscillates too much. 
 ###################################
@@ -2969,7 +2975,7 @@ plot_ARMA_sample_statistic_stop_time(100, 100, 1, c_alphas_final_1[1])
 
 
 ###############################################
-#GARCH
+#GARCH Stopping Time
 ###############################################
 plot_garch_stopping_time <- function(M, t, beta, c_alpha, kernel = "Bartlett"){
   h = floor(t^(1/2))
@@ -3844,8 +3850,16 @@ calculate_returns_and_plots_stoptime("data/DJIA_data_1929.csv", "DJIA", toFile =
 #All Stop Times
 ##############################################################################################
 
-
-stock_sample_stop_times <- function(series_xts, M, beta, c_alpha, file_name, stock, ker){
+##################################################
+#Perform sequential procedure on great depression data
+#series_xts = time series of type 'xts', produced by the quantmod package
+#M = number of training examples in the series
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alpha = critical value for test
+#stock = name of the stock (ticker abbreviation)
+#ker = kernel to use for the lrv estimator
+##################################################
+stock_sample_stop_times <- function(series_xts, M, beta, c_alpha, stock, ker){
   series <- as.ts(series_xts)
   series_df <- data.frame(index(series_xts), coredata(series_xts), stringsAsFactors = FALSE)
   colnames(series_df) <- c("Date", "Log Return")
@@ -3954,10 +3968,16 @@ calculate_all_stop_times("GS", toFile = TRUE, stop_time = TRUE, ker = "None")
 
 
 ############################################
-#Rolling window approach
+#Rolling window approach, experiement where data is appended after a certain period of not finding a change point
+#series_xts = time series of type 'xts', produced by the quantmod package
+#M = number of training examples in the series
+#beta = beta parameter in the denominator of the Theta(u) statistic
+#c_alpha = critical value for test
+#stock = name of the stock (ticker abbreviation)
+#ker = kernel to use for the lrv estimator
 ############################################
 
-stock_sample_rolling_stop_times <- function(series_xts, M, beta, c_alpha, file_name, stock, ker){
+stock_sample_rolling_stop_times <- function(series_xts, M, beta, c_alpha, stock, ker){
   series <- as.ts(series_xts)
   series_df <- data.frame(index(series_xts), coredata(series_xts), stringsAsFactors = FALSE)
   colnames(series_df) <- c("Date", "Log Return")
@@ -4020,7 +4040,9 @@ stock_sample_rolling_stop_times <- function(series_xts, M, beta, c_alpha, file_n
 
 
 
-
+##################################################
+#Perform experiemental sequential procedure on great depression data
+##################################################
 calculate_sequential_stop_times <- function(name, sample_pct = 0.10, toFile = FALSE, stop_time = FALSE, ker = "None"){
   
   options("getSymbols.warning4.0"=FALSE)
