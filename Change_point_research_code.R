@@ -3790,7 +3790,11 @@ calculate_returns_and_plots_stoptime <- function(path, name, weeks = 52, months 
   monthly_returns <- na.omit(monthlyReturn(coin_xts, type = "log"))
   #quarterly_returns <- na.omit(quarterlyReturn(coin_xts, type = "log"))
   #yearly_returns <- na.omit(annualReturn(coin_xts, type = "log"))
-  
+  file_name <- paste("/Users/Jon/Library/Mobile Documents/com~apple~CloudDocs/Class Work 2018/Thesis/plots/stocks/", name,"_price_monthly_acf.pdf", sep = "")
+  pdf(file_name)
+  title <- paste(name, " ACF", sep = "")
+  acf(monthly_returns, main = title)
+  dev.off()
   #plot_stock_series(weekly_returns, name, type = "Weekly")
   plot_stock_series(monthly_returns, name, type = "Monthly")
   #plot_stock_series(quarterly_returns, name, type = "Quarterly")
