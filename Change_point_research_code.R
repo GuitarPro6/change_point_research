@@ -237,6 +237,10 @@ calculate_alpha <- function(M, t, N, beta, c_alpha){
     test <- rnorm(t)
     diff_vector <- vector()
     sd_estimate <- sd(training)
+    ####Plot of function g
+    k_int <- 1:(t-h)
+    diffs<- vector()
+    g<- vector()
     for(k in 1:(t-h)){
       sum =0 
       for(j in k:(k+h)){
@@ -244,11 +248,24 @@ calculate_alpha <- function(M, t, N, beta, c_alpha){
       }
       window_vec[k] <- sum/h
       g_T <- (sd_estimate*(h + k)^beta)/(h^{beta+ 1/2})
+      g[k] <- g_T
       diff_vector[k] <- abs(M_mean - window_vec[k])/(g_T)
+      diffs[k] = abs(M_mean - window_vec[k])
     }
+
     
     max_vector[i] <- max(diff_vector)
   }
+
+
+    file_name <- paste("/Users/Jon/Library/Mobile Documents/com~apple~CloudDocs/Class Work 2018/Thesis/plots/","boundary_normal",T_,"_", beta, ".pdf", sep = "")
+    title <- bquote("Boundary Function When T = " ~ .(t) ~ ", "~ beta == .(beta)) 
+    pdf(file_name)
+    plot(k_int,c_alpha, main = title, ylab = "g(h,k)", type = "l", xlab = "k")
+    points(k_int, diffs, col = "red")
+    dev.off()
+  
+  
 
   alpha <- length(max_vector[max_vector >= c_alpha])/length(max_vector)
   
@@ -3056,6 +3073,10 @@ stock_sample_test_statistic_stop_time <- function(series_xts, M, beta, c_alpha, 
     }
   }
   
+  if(stop_obs == 0){
+    #stop_obs = T_-h
+  }
+  
   plot.ts(series)
   abline(v = stop_obs, col = "red")
   
@@ -3068,12 +3089,13 @@ stock_sample_test_statistic_stop_time <- function(series_xts, M, beta, c_alpha, 
   
   plot(series, main = title, ylab = paste("Log ", class, " Return"))
   abline(v = stop_obs, col = "red")
+  abline(v = stop_obs+h, col = "darkorchid1", lty = 5, lwd = 1.8)
   dev.off()
    
-  #print(M)
-  #print(T_)
-  #print(k)
-  #print(series_df[stop_obs, "Date"])
+  print(M)
+  print(T_)
+  print(stop_obs)
+  print(series_df[stop_obs, "Date"])
   
   return(c(stop_obs, series_df[stop_obs, "Date"]))
 }
@@ -4101,3 +4123,42 @@ calculate_sequential_stop_times("GS", toFile = TRUE, stop_time = TRUE, ker = "No
 
 citation(package = "quantmod")
 citation(package = "fGarch")
+
+
+
+###################################################
+#Plot boundary function for different sizes of test data
+#Variance 1
+###################################################
+
+
+plot_boundary_function <- function(T_, beta){
+  h <- floor(T_^(1/2))
+  g <- vector()
+  k_int <- 1:(T_-h)
+
+    for(k in 1:(T_-h)){
+        g[k] <- ((h + k)^beta)/(h^{beta+ 1/2})
+      }
+  
+  file_name <- paste("/Users/Jon/Library/Mobile Documents/com~apple~CloudDocs/Class Work 2018/Thesis/plots/","boundary",T_,"_", beta, ".pdf", sep = "")
+    title <- bquote("Boundary Function When T =" ~ .(T_) ~ ", "~ beta == .(beta)) 
+
+  pdf(file_name)
+  plot(k_int,g, main = title, ylab = "g(h,k)", type = "l", xlab = "k")
+  dev.off()
+  
+
+}
+
+
+plot_boundary_function(100, 1)
+plot_boundary_function(100, 2)
+plot_boundary_function(100, 3)
+plot_boundary_function(100, 4)
+
+
+plot_boundary_function(1000, 1)
+plot_boundary_function(1000, 2)
+plot_boundary_function(1000, 3)
+plot_boundary_function(1000, 4)
